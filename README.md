@@ -105,4 +105,7 @@ MIT License
 
 ## 👨‍💻 作者
 
-人工智能专业课程作业项目
+23089098王亦菲
+trae-Doubao-Seed-2.0-Code
+trae-Kimi-K2.5
+VS Code-Github Copilot Chat-Rapter mini (Preview)
