@@ -105,7 +105,7 @@ MIT License
 
 ## 👨‍💻 作者
 
-23089098王亦菲
-trae-Doubao-Seed-2.0-Code
-trae-Kimi-K2.5
+23089098王亦菲<br>
+trae-Doubao-Seed-2.0-Code<br>
+trae-Kimi-K2.5<br>
 VS Code-Github Copilot Chat-Rapter mini (Preview)
