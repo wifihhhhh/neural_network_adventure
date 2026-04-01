@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神经网络大冒险 - Neural Network Adventure</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 背景效果 -->
+    <div class="bg-animation">
+        <div class="mesh-gradient"></div>
+        <div class="aurora-overlay"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- 游戏主容器 -->
+    <div class="game-wrapper">
+        
+        <!-- 顶部标题栏 -->
+        <header class="top-bar">
+            <div class="brand">
+                <span class="brand-icon">🧠</span>
+                <div class="brand-text">
+                    <h1>神经网络大冒险</h1>
+                    <span>Neural Network Adventure</span>
+                </div>
+            </div>
+            
+            <div class="game-stats">
+                <div class="stat-box">
+                    <span class="stat-name">得分</span>
+                    <span class="stat-number" id="scoreValue">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-name">层数</span>
+                    <span class="stat-number" id="levelValue">1/5</span>
+                </div>
+                <div class="stat-box energy-box">
+                    <span class="stat-name">能量</span>
+                    <div class="energy-bar-wrap">
+                        <div class="energy-bar" id="energyBar"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="top-actions">
+                <button class="action-btn" id="pauseBtn" title="暂停">⏸</button>
+                <button class="action-btn" id="helpBtn" title="帮助">?</button>
+            </div>
+        </header>
+
+        <!-- 中间游戏区 -->
+        <div class="game-content">
+            <!-- 左侧边栏 -->
+            <aside class="sidebar left">
+                <div class="panel">
+                    <h3 class="panel-title">🌐 神经网络</h3>
+                    <div class="network-display">
+                        <div class="net-layer">
+                            <span class="layer-tag">输入</span>
+                            <div class="nodes">
+                                <div class="node active"></div>
+                                <div class="node active"></div>
+                                <div class="node active"></div>
+                            </div>
+                        </div>
+                        <div class="net-connections">
+                            <div class="conn-line"></div>
+                            <div class="conn-line"></div>
+                            <div class="conn-line"></div>
+                        </div>
+                        <div class="net-layer">
+                            <span class="layer-tag">隐藏1</span>
+                            <div class="nodes">
+                                <div class="node"></div>
+                                <div class="node"></div>
+                                <div class="node"></div>
+                                <div class="node"></div>
+                            </div>
+                        </div>
+                        <div class="net-connections">
+                            <div class="conn-line"></div>
+                            <div class="conn-line"></div>
+                            <div class="conn-line"></div>
+                            <div class="conn-line"></div>
+                        </div>
+                        <div class="net-layer">
+                            <span class="layer-tag">隐藏2</span>
+                            <div class="nodes">
+                                <div class="node"></div>
+                                <div class="node"></div>
+                                <div class="node"></div>
+                                <div class="node"></div>
+                                <div class="node"></div>
+                            </div>
+                        </div>
+                        <div class="net-connections">
+                            <div class="conn-line"></div>
+                            <div class="conn-line"></div>
+                            <div class="conn-line"></div>
+                        </div>
+                        <div class="net-layer">
+                            <span class="layer-tag">输出</span>
+                            <div class="nodes">
+                                <div class="node"></div>
+                                <div class="node"></div>
+                                <div class="node"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 中间游戏画布 -->
+            <main class="main-stage">
+                <div class="canvas-container">
+                    <canvas id="gameCanvas"></canvas>
+                    
+                    <!-- 开始界面 -->
+                    <div class="screen-overlay" id="startScreen">
+                        <div class="screen-content">
+                            <h2 class="game-title">神经网络大冒险</h2>
+                            <p class="game-subtitle">NEURAL NETWORK ADVENTURE</p>
+                            <div class="intro-text">
+                                <p>🎮 扮演数据粒子，穿越神经网络</p>
+                                <p>⚡ 收集能量，激活神经元</p>
+                                <p>🎯 完成前向传播，到达输出层</p>
+                            </div>
+                            <button class="start-btn" id="startBtn">开始冒险</button>
+                        </div>
+                    </div>
+
+                    <!-- 游戏结束 -->
+                    <div class="screen-overlay hidden" id="gameOverScreen">
+                        <div class="screen-content">
+                            <h2 class="screen-title" id="gameOverTitle">游戏结束</h2>
+                            <p class="final-score">最终得分: <span id="finalScore">0</span></p>
+                            <button class="start-btn" id="restartBtn">重新开始</button>
+                        </div>
+                    </div>
+
+                    <!-- 关卡完成 -->
+                    <div class="screen-overlay hidden" id="levelCompleteScreen">
+                        <div class="screen-content">
+                            <h2 class="screen-title">关卡完成!</h2>
+                            <div class="level-results">
+                                <div class="result-item">
+                                    <span>收集能量</span>
+                                    <span id="levelEnergy">0</span>
+                                </div>
+                                <div class="result-item">
+                                    <span>激活神经元</span>
+                                    <span id="levelNeurons">0</span>
+                                </div>
+                                <div class="result-item">
+                                    <span>用时</span>
+                                    <span id="levelTime">0s</span>
+                                </div>
+                            </div>
+                            <button class="start-btn" id="nextLevelBtn">下一层</button>
+                        </div>
+                    </div>
+
+                    <!-- 暂停界面 -->
+                    <div class="screen-overlay hidden" id="pauseScreen">
+                        <div class="screen-content">
+                            <h2 class="screen-title">游戏暂停</h2>
+                            <button class="start-btn" id="resumeBtn">继续游戏</button>
+                            <button class="secondary-btn" id="restartFromPause">重新开始</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- 右侧边栏 -->
+            <aside class="sidebar right">
+                <div class="panel">
+                    <h3 class="panel-title">💡 AI知识点</h3>
+                    <div class="knowledge-content" id="knowledgeCard">
+                        <p>神经网络由输入层、隐藏层和输出层组成。数据从输入层进入，经过各层处理，最终在输出层产生结果。</p>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <h3 class="panel-title">📊 游戏日志 <button class="action-btn" id="clearLog" title="清除日志">🧹</button></h3>
+                    <div class="log-content" id="gameLog">
+                        <div class="log-item">游戏准备就绪...</div>
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3 class="panel-title">📈 梯度图</h3>
+                    <canvas id="gradientChart" width="300" height="120"></canvas>
+                </div>
+            </aside>
+        </div>
+
+        <!-- 底部控制栏 -->
+        <footer class="bottom-bar">
+            <div class="controls-hint">
+                <span class="hint-item"><kbd>←</kbd><kbd>→</kbd> 移动</span>
+                <span class="hint-item"><kbd>SPACE</kbd> 跳跃(可二段跳)</span>
+                <span class="hint-item"><kbd>P</kbd> 暂停</span>
+            </div>
+            <div class="activation-control">
+                <label>激活函数:</label>
+                <select id="activationSelect">
+                    <option value="relu">ReLU</option>
+                    <option value="sigmoid">Sigmoid</option>
+                    <option value="tanh">Tanh</option>
+                </select>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 帮助弹窗 -->
+    <div class="modal hidden" id="helpModal">
+        <div class="modal-box">
+            <button class="modal-close" id="closeHelp">&times;</button>
+            <h2 class="modal-title">游戏帮助</h2>
+            <div class="help-content">
+                <section>
+                    <h3>🎮 操作方式</h3>
+                    <div class="control-list">
+                        <div class="control-row">
+                            <span class="keys"><kbd>←</kbd> <kbd>→</kbd></span>
+                            <span>左右移动</span>
+                        </div>
+                        <div class="control-row">
+                            <span class="keys"><kbd>SPACE</kbd></span>
+                            <span>跳跃（可二段跳）</span>
+                        </div>
+                        <div class="control-row">
+                            <span class="keys"><kbd>P</kbd></span>
+                            <span>暂停游戏</span>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h3>🎯 游戏目标</h3>
+                    <ul class="help-list">
+                        <li>控制数据粒子穿越神经网络</li>
+                        <li>收集能量球维持生命值</li>
+                        <li>激活神经元获得高分</li>
+                        <li>找到出口进入下一层</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>⚠️ 危险</h3>
+                    <ul class="help-list">
+                        <li><strong>过拟合怪</strong> - 会追赶你</li>
+                        <li><strong>梯度消失</strong> - 降低跳跃能力</li>
+                        <li><strong>陷阱</strong> - 掉下去会扣能量</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/entities.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
